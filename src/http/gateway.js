@@ -815,7 +815,7 @@ function createGatewayServer(options = {}) {
   const server = http.createServer(async (req, res) => {
     const url = new URL(req.url || "/", `http://${req.headers.host || "127.0.0.1"}`);
     const pathname = url.pathname;
-    const isChatUiRoute = req.method === "GET" && (pathname === "/" || pathname === "/chat");
+    const isChatUiRoute = (req.method === "GET" || req.method === "HEAD") && (pathname === "/" || pathname === "/chat");
     const meta = resolveMeta(req);
     const startedAt = Date.now();
     let statusCode = 500;
