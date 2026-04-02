@@ -1,10 +1,10 @@
 function getChatPageHtml() {
   return `<!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Trae Bridge Chat</title>
+    <title>Trae Bridge 聊天</title>
     <style>
       :root {
         color-scheme: light;
@@ -409,64 +409,64 @@ function getChatPageHtml() {
       <aside class="panel sidebar">
         <div class="eyebrow">Trae Bridge</div>
         <div class="stack">
-          <h1>Local chat front end for the HTTP gateway.</h1>
-          <p class="lede">This page talks to the same gateway that powers the API. Keep Trae open on a project, then send prompts here.</p>
+          <h1>HTTP 网关的本地聊天前端。</h1>
+          <p class="lede">此页面与驱动 API 的网关通信。保持 Trae 在项目上打开，然后在此发送提示。</p>
         </div>
 
         <section class="status-card">
           <div class="status-row">
-            <strong>Gateway status</strong>
-            <span id="status-pill" class="status-pill" data-tone="busy">Checking</span>
+            <strong>网关状态</strong>
+            <span id="status-pill" class="status-pill" data-tone="busy">检查中</span>
           </div>
-          <div id="status-detail" class="hint">Loading readiness information.</div>
+          <div id="status-detail" class="hint">正在加载就绪信息。</div>
         </section>
 
         <div class="field">
-          <label for="token-input">Bearer token</label>
-          <input id="token-input" type="password" placeholder="Optional if auth is enabled">
+          <label for="token-input">Bearer 令牌</label>
+          <input id="token-input" type="password" placeholder="如果启用了身份验证则为可选">
         </div>
 
         <div class="stack">
-          <button id="save-token-button" class="secondary" type="button">Save token</button>
-          <button id="refresh-button" class="ghost" type="button">Refresh status</button>
-          <button id="new-session-button" class="primary" type="button">New session</button>
+          <button id="save-token-button" class="secondary" type="button">保存令牌</button>
+          <button id="refresh-button" class="ghost" type="button">刷新状态</button>
+          <button id="new-session-button" class="primary" type="button">新建会话</button>
         </div>
 
         <label class="toggle" for="stream-toggle">
           <input id="stream-toggle" type="checkbox" checked>
-          <span>Stream replies when possible</span>
+          <span>尽可能流式传输回复</span>
         </label>
 
         <section class="session-box">
-          <strong>Session</strong>
-          <div id="session-value" class="session-value">No session yet.</div>
+          <strong>会话</strong>
+          <div id="session-value" class="session-value">暂无会话。</div>
         </section>
 
-        <a class="utility" href="/debug/automation" target="_blank" rel="noreferrer">Open automation diagnostics</a>
+        <a class="utility" href="/debug/automation" target="_blank" rel="noreferrer">打开自动化诊断</a>
       </aside>
 
       <main class="panel main">
         <header class="main-header">
           <div>
-            <h2>Conversation</h2>
-            <p class="subtitle">Messages are sent through the local HTTP bridge, then forwarded into the Trae window.</p>
+            <h2>对话</h2>
+            <p class="subtitle">消息通过本地 HTTP 桥发送，然后转发到 Trae 窗口。</p>
           </div>
         </header>
 
         <section id="message-log" class="log" aria-live="polite">
-          <div class="empty">No messages yet. Start a session and send your first prompt.</div>
+          <div class="empty">暂无消息。启动会话并发送您的第一个提示。</div>
         </section>
 
         <section class="composer">
           <div class="field">
-            <label for="composer-input">Prompt</label>
-            <textarea id="composer-input" placeholder="Ask Trae something about the open project."></textarea>
+            <label for="composer-input">提示</label>
+            <textarea id="composer-input" placeholder="向 Trae 询问有关打开项目的问题。"></textarea>
           </div>
           <div class="composer-actions">
-            <div class="hint">Press Ctrl+Enter to send.</div>
+            <div class="hint">按 Ctrl+Enter 发送。</div>
             <div class="actions">
-              <button id="clear-button" class="ghost" type="button">Clear</button>
-              <button id="send-button" class="primary" type="button">Send message</button>
+              <button id="clear-button" class="ghost" type="button">清除</button>
+              <button id="send-button" class="primary" type="button">发送消息</button>
             </div>
           </div>
         </section>
@@ -524,7 +524,7 @@ function getChatPageHtml() {
 
         function setSession(sessionId) {
           state.sessionId = sessionId || "";
-          ui.sessionValue.textContent = state.sessionId || "No session yet.";
+          ui.sessionValue.textContent = state.sessionId || "暂无会话。";
         }
 
         function setSending(isSending) {
@@ -535,13 +535,13 @@ function getChatPageHtml() {
           ui.clearButton.disabled = state.sending;
           ui.composerInput.disabled = state.sending;
           if (state.sending) {
-            setStatus("Running", "Waiting for Trae to answer the latest prompt.", "busy");
+            setStatus("运行中", "等待 Trae 回答最新的提示。", "busy");
           }
         }
 
         function renderMessages() {
           if (!state.messages.length) {
-            ui.messageLog.innerHTML = '<div class="empty">No messages yet. Start a session and send your first prompt.</div>';
+            ui.messageLog.innerHTML = '<div class="empty">暂无消息。启动会话并发送您的第一个提示。</div>';
             return;
           }
 
@@ -610,7 +610,7 @@ function getChatPageHtml() {
           try {
             return JSON.parse(text);
           } catch (error) {
-            throw new Error("The gateway returned non-JSON content.");
+            throw new Error("网关返回了非 JSON 内容。");
           }
         }
 
@@ -630,7 +630,7 @@ function getChatPageHtml() {
           var payload = await parseJsonResponse(response);
           if (!response.ok) {
             var error = new Error(
-              payload && payload.message ? payload.message : "The request failed."
+              payload && payload.message ? payload.message : "请求失败。"
             );
             error.code = payload && payload.code ? payload.code : "HTTP_" + response.status;
             error.details = payload && payload.details ? payload.details : {};
@@ -649,22 +649,22 @@ function getChatPageHtml() {
               payload.data.automation.target &&
               payload.data.automation.target.title
                 ? payload.data.automation.target.title
-                : "Trae window";
-            setStatus("Ready", "Connected to " + targetTitle + ".", "ready");
+                : "Trae 窗口";
+            setStatus("就绪", "已连接到 " + targetTitle + "。", "ready");
           } catch (error) {
             if (error.code === "UNAUTHORIZED") {
-              setStatus("Locked", "Enter a token if gateway auth is enabled.", "error");
+              setStatus("已锁定", "如果网关启用了身份验证，请输入令牌。", "error");
               return;
             }
 
             try {
               var healthPayload = await apiJson("/health", { method: "GET" });
               var detail = healthPayload && healthPayload.data && healthPayload.data.automation && healthPayload.data.automation.error
-                ? healthPayload.data.automation.error.message || "Automation is not ready."
-                : "Gateway is running, but readiness checks are still failing.";
-              setStatus("Not ready", detail, "busy");
+                ? healthPayload.data.automation.error.message || "自动化尚未就绪。"
+                : "网关正在运行，但就绪检查仍然失败。";
+              setStatus("未就绪", detail, "busy");
             } catch (healthError) {
-              setStatus("Offline", healthError.message || "Unable to reach the gateway.", "error");
+              setStatus("离线", healthError.message || "无法连接到网关。", "error");
             }
           }
         }
@@ -683,7 +683,7 @@ function getChatPageHtml() {
           });
           var sessionId = payload && payload.data && payload.data.session ? payload.data.session.sessionId : "";
           setSession(sessionId);
-          addMessage("system", "Started a new session.");
+          addMessage("system", "启动了新会话。");
           return sessionId;
         }
 
@@ -851,14 +851,14 @@ function getChatPageHtml() {
           if (!response.ok) {
             var failedPayload = await parseJsonResponse(response);
             var streamError = new Error(
-              failedPayload && failedPayload.message ? failedPayload.message : "Streaming request failed."
+              failedPayload && failedPayload.message ? failedPayload.message : "流式请求失败。"
             );
             streamError.code = failedPayload && failedPayload.code ? failedPayload.code : "HTTP_" + response.status;
             throw streamError;
           }
 
           if (!response.body || typeof response.body.getReader !== "function") {
-            throw new Error("Streaming is not supported by this browser.");
+            throw new Error("此浏览器不支持流式传输。");
           }
 
           var reader = response.body.getReader();
@@ -893,7 +893,7 @@ function getChatPageHtml() {
                 } else if (typeof payload.chunk === "string") {
                   assistantText = mergeStreamingText(assistantText, payload.chunk, "replace");
                 }
-                updateMessage(messageId, assistantText || "Waiting for streamed output...");
+                updateMessage(messageId, assistantText || "等待流式输出...");
                 continue;
               }
 
@@ -906,18 +906,18 @@ function getChatPageHtml() {
                     ? parsed.data.result.response.text
                     : assistantText;
                 assistantText = mergeStreamingText(assistantText, finalText || "", "replace");
-                updateMessage(messageId, assistantText || finalText || "(empty reply)");
+                updateMessage(messageId, assistantText || finalText || "(空回复)");
                 return;
               }
 
               if (parsed.event === "error") {
-                var streamMessageText = parsed.data && parsed.data.message ? parsed.data.message : "Streaming failed.";
+                var streamMessageText = parsed.data && parsed.data.message ? parsed.data.message : "流式传输失败。";
                 throw new Error(streamMessageText);
               }
             }
           }
 
-          updateMessage(messageId, assistantText || "(stream closed with no reply)");
+          updateMessage(messageId, assistantText || "(流已关闭，无回复)");
         }
 
         async function sendMessage() {
@@ -929,7 +929,7 @@ function getChatPageHtml() {
           setSending(true);
           addMessage("user", content);
           ui.composerInput.value = "";
-          var assistantMessage = addMessage("assistant", "Waiting for Trae...");
+          var assistantMessage = addMessage("assistant", "等待 Trae...");
 
           try {
             var sessionId = await ensureSession();
@@ -947,12 +947,12 @@ function getChatPageHtml() {
                 payload.data.result.response &&
                 payload.data.result.response.text
                   ? payload.data.result.response.text
-                  : "(empty reply)";
+                  : "(空回复)";
               updateMessage(assistantMessage.id, reply);
             }
             await refreshStatus();
           } catch (error) {
-            updateMessage(assistantMessage.id, error.message || "Request failed.");
+            updateMessage(assistantMessage.id, error.message || "请求失败。");
             var lastMessage = state.messages.find(function (entry) {
               return entry.id === assistantMessage.id;
             });
@@ -960,7 +960,7 @@ function getChatPageHtml() {
               lastMessage.role = "error";
             }
             renderMessages();
-            setStatus("Error", error.message || "The gateway rejected the request.", "error");
+            setStatus("错误", error.message || "网关拒绝了请求。", "error");
           } finally {
             setSending(false);
           }
@@ -969,7 +969,7 @@ function getChatPageHtml() {
         ui.saveTokenButton.addEventListener("click", function () {
           state.authToken = ui.tokenInput.value.trim();
           persistToken(state.authToken);
-          addMessage("system", state.authToken ? "Saved bearer token for this browser." : "Cleared saved bearer token.");
+          addMessage("system", state.authToken ? "已为此浏览器保存 Bearer 令牌。" : "已清除保存的 Bearer 令牌。");
           refreshStatus();
         });
 
@@ -982,8 +982,8 @@ function getChatPageHtml() {
             return;
           }
           createFreshSession().catch(function (error) {
-            addMessage("error", error.message || "Failed to create a session.");
-            setStatus("Error", error.message || "Failed to create a session.", "error");
+            addMessage("error", error.message || "创建会话失败。");
+            setStatus("错误", error.message || "创建会话失败。", "error");
           });
         });
 
@@ -1011,7 +1011,7 @@ function getChatPageHtml() {
         refreshStatus().then(function () {
           return ensureSession();
         }).catch(function (error) {
-          addMessage("system", error.message || "Start a session manually when the gateway is ready.");
+          addMessage("system", error.message || "当网关就绪时手动启动会话。");
         });
       })();
     </script>
